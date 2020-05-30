@@ -1,0 +1,67 @@
+﻿@model WebApp.ViewModels.Product.AddProductVM
+@{
+    ViewData["Title"] = "Index";
+}
+<form asp-action="NewProduct" method="post" enctype="multipart/form-data" asp-controller="Products" asp-antiforgery="true">
+    <div>
+        <div>
+            <label asp-for="Model"></label>
+            <input type="text" asp-for="Model" />
+        </div>
+        <div>
+            <label asp-for="Description"></label>
+            <input asp-for="Description" />
+        </div>
+        <div>
+            <label asp-for="Files"></label>
+            <input name="Files" id="Files" multiple type="file" />
+            <div class="gallery"></div>
+        </div>
+        <div>
+            <label asp-for="PriceBy"></label>
+            <input asp-for="PriceBy" />
+        </div>
+        <div>
+            <label asp-for="BrandId"></label>
+            <select asp-for="BrandId" asp-items="ViewBag.Brands"></select>
+        </div>
+        <div>
+            <input type="submit" value="Save" />
+        </div>
+    </div>
+</form>
+
+<style>
+    .gallery img {
+        width: 125px;
+        height: 100px;
+        box-shadow: 1px 0px 3px #ccc;
+        -webkit-box-shadow: 1px 0px 3px #ccc;
+        -moz-box-shadow: 1px 0px 3px #ccc;
+        padding: 10px;
+    }
+</style>
+@section scripts{
+    <script>
+        $(function () {
+            // Multiple images preview in browser
+            var imagesPreview = function (input, placeToInsertImagePreview) {
+
+                if (input.files) {
+                    var filesAmount = input.files.length;
+
+                    for (i = 0; i < filesAmount; i++) {
+                        var reader = new FileReader();
+                        reader.onload = function (event) {
+                            $($.parseHTML('<img>')).attr('src', event.target.result).appendTo(placeToInsertImagePreview);
+                        }
+                        reader.readAsDataURL(input.files[i]);
+                    }
+                }
+            };
+            $('#Files').on('change', function () {
+                imagesPreview(this, 'div.gallery');
+            });
+        });
+    </script>
+}

@@ -2,34 +2,40 @@
 @{
     ViewData["Title"] = "Index";
 }
-<form asp-action="NewProduct" method="post" enctype="multipart/form-data" asp-controller="Products" asp-antiforgery="true">
-    <div>
-        <div>
-            <label asp-for="Model"></label>
-            <input type="text" asp-for="Model" />
+    <form asp-action="NewProduct" class="col-md-5 form-edit" method="post" enctype="multipart/form-data" asp-controller="Products" asp-antiforgery="true">
+        <div class="card-body">
+            <div class="form-group">
+                <label asp-for="Model"></label>
+                <input class="form-control" type="text" asp-for="Model" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input class="form-control" asp-for="Description" />
+            </div>
+            <div class="input-group">
+                <div class="custom-file">
+                    <input class="custom-file-input" name="Files" id="Files" multiple type="file">
+                    <label class="custom-file-label" asp-for="Files"></label>
+                </div>
+                <div class="input-group-append">
+                    <span class="input-group-text" id="">Upload</span>
+                </div>
+            </div>
+          
+            <div class="form-group">
+                <label asp-for="PriceBy"></label>
+                <input class="form-control" asp-for="PriceBy" />
+            </div>
+            <div class="form-group">
+                <label asp-for="BrandId"></label>
+                <select class="form-control" asp-for="BrandId" asp-items="ViewBag.Brands"></select>
+            </div>
+
         </div>
-        <div>
-            <label asp-for="Description"></label>
-            <input asp-for="Description" />
+        <div class="card-footer">
+            <input type="submit" class="btn btn-primary" value="Save" />
         </div>
-        <div>
-            <label asp-for="Files"></label>
-            <input name="Files" id="Files" multiple type="file" />
-            <div class="gallery"></div>
-        </div>
-        <div>
-            <label asp-for="PriceBy"></label>
-            <input asp-for="PriceBy" />
-        </div>
-        <div>
-            <label asp-for="BrandId"></label>
-            <select asp-for="BrandId" asp-items="ViewBag.Brands"></select>
-        </div>
-        <div>
-            <input type="submit" value="Save" />
-        </div>
-    </div>
-</form>
+    </form>
 
 <style>
     .gallery img {

@@ -72,5 +72,26 @@ namespace WebApp.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public IActionResult AddSingleProduct(Guid Id)
+        {
+            ViewBag.product = ctx.Products.Where(p => p.ProductId == Id).Include(d => d.Photos).FirstOrDefault();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddSingleProduct(Guid Id, int count, string price, int sizeId)
+        {
+            var product = ctx.Products.Where(p => p.ProductId == Id).Include(d => d.Photos).FirstOrDefault();
+            SingleProduct singleProduct = new SingleProduct
+            {
+                ProductId = Id,
+                Count = count,
+                PriceSale = float.Parse(price),
+                SizeId = sizeId
+            };
+            ctx.SingleProducts.Add(singleProduct);
+            ctx.SaveChanges();
+            return View("Index");
+        }
     }
 }

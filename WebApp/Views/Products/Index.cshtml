@@ -2,63 +2,16 @@
 @using WebApp.ViewModels.Product
 @{
     ViewData["Title"] = "Home Page";
-   Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-    <div class="container">
-        <div class="row">
-            @foreach (var item in Model)
-            {
-                <div class="col-md-4 mt-3">
-                    <div class="card">
-                        <div class="card-header">
-                            @item.Model
-                            <br>
-                            Price - @item.PriceBy $
-                        </div>
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
 
-                        <div class="card-body w3-content w3-display-container">
-
-                            @if (item.Photos != null)
-                            {
-                                @for (int i = 0; i < item.Photos.Count(); i++)
-                                {
-                                    <img class="mySlides" style="width:100%" src="@Url.Content(item.Photos[i].Path)">
-                                }
-                            }
-                            <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
-                            <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
-                        </div>
-                    </div>
-                        <div class="card-footer">
-                            <button class="btn w-100 mb-1 btn-default">Edit</button>
-                            <button class="btn w-100 mb-1 btn-secondary">Add Single</button>
-                            <button class="btn w-100 mb-1 btn-dark">Add Multiple</button>
-                        </div>
-                    </div>
-                
-            }
-        </div>
+            @Html.Partial("_Product", item)
+        }
     </div>
- 
+</div>
+
 @{await Html.RenderPartialAsync("_SaveProduct", new AddProductVM());}
-@section scripts{ 
-    <script>
-        var slideIndex = 1;
-        showDivs(slideIndex);
-
-        function plusDivs(n) {
-            showDivs(slideIndex += n);
-        }
-
-        function showDivs(n) {
-            var i;
-            var x = document.getElementsByClassName("mySlides");
-            if (n > x.length) { slideIndex = 1 }
-            if (n < 1) { slideIndex = x.length }
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";
-            }
-            x[slideIndex - 1].style.display = "block";
-        }
-    </script>
-}

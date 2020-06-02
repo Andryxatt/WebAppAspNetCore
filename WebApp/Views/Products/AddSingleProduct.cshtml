@@ -1,0 +1,81 @@
+﻿@model WebApp.Models.SingleProduct
+@using WebApp.Models
+@{
+    ViewData["Title"] = "AddSingleProduct";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="col-md-4 mt-3">
+    <div class="card">
+        <div class="card-header">
+            @ViewBag.product.Model
+            <br>
+            Price - @ViewBag.product.PriceBy $
+        </div>
+
+        <div class="card-body w3-content w3-display-container">
+
+            @if (ViewBag.product.Photos != null)
+            {
+                @foreach (var item in ViewBag.product.Photos)
+                {
+                    <img style="width:100%" src="@Url.Content(item.Path)">
+                }
+            }
+
+        </div>
+    </div>
+</div>
+
+<form>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+        </div>
+        <input type="text" asp-for="PriceSale" value="@ViewBag.product.PriceBy" class="form-control">
+        <div class="input-group-append">
+            <span class="input-group-text">.00</span>
+        </div>
+    </div>
+    <div id="sizes-list">
+        <div class="form-group size-group">
+            <input type="text"  id="SizeId" value="" />
+            <input type="number" id="countSizes" value="" />
+        </div>
+    </div>
+    
+  
+    <button id="add-size">Add Size</button>
+</form>
+@section scripts{
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/start/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#SizeId").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/Sizes/GetSizes/',
+                        data: { "prefix": request.term },
+                        type: "POST",
+                        dataType: "json",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.label, value: item.label };
+                            }))
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                minLength: 1
+            });
+        });
+       
+    </script>
+}

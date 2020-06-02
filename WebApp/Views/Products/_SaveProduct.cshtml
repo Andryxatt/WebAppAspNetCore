@@ -1,7 +1,5 @@
 ﻿@model WebApp.ViewModels.Product.AddProductVM
-@{
-    ViewData["Title"] = "Index";
-}
+
     <form asp-action="NewProduct" class="col-md-5 form-edit" method="post" enctype="multipart/form-data" asp-controller="Products" asp-antiforgery="true">
         <div class="card-body">
             <div class="form-group">

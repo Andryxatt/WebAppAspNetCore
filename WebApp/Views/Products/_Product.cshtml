@@ -1,0 +1,29 @@
+﻿@model WebApp.Models.Product
+
+<div class="col-md-4 mt-3">
+    <div class="card">
+        <div class="card-header">
+            @Model.Model
+            <br>
+            Price - @Model.PriceBy $
+        </div>
+
+        <div class="card-body w3-content w3-display-container">
+
+            @if (Model.Photos != null)
+            {
+                @for (int i = 0; i < Model.Photos.Count(); i++)
+                {
+                    <img style="width:100%" src="@Url.Content(Model.Photos[i].Path)">
+                }
+            }
+          
+        </div>
+    </div>
+    <div class="card-footer">
+        <button asp-area="" asp-controller="Home" asp-action="Index" class="btn w-100 mb-1 btn-default">Edit</button>
+        <a asp-route-id="@Model.ProductId" asp-controller="Products" asp-action="AddSingleProduct"  class="btn w-100 mb-1 btn-secondary">Add Single</a>
+        <button class="btn w-100 mb-1 btn-dark">Add Multiple</button>
+    </div>
+</div>
+

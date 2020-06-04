@@ -27,7 +27,7 @@
     </div>
 </div>
 
-<form>
+<form asp-action="AddSingleProduct" asp-controller="Products" method="post">
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">$</span>
@@ -39,43 +39,76 @@
     </div>
     <div id="sizes-list">
         <div class="form-group size-group">
-            <input type="text"  id="SizeId" value="" />
-            <input type="number" id="countSizes" value="" />
+            <input type="text" class="SizeInput" id="size-1" name="sizesId[]"/>
+            <input type="number" name="countSizes[]" value="0" />
         </div>
     </div>
-    
-  
-    <button id="add-size">Add Size</button>
+    <button id="add-size" class="add-size">Add Size</button>
+    <button type="submit" class="btn btn-success">Save</button>
 </form>
 @section scripts{
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/start/jquery-ui.css">
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+   
     <script type="text/javascript">
-        $(function () {
-            $("#SizeId").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '/Sizes/GetSizes/',
-                        data: { "prefix": request.term },
-                        type: "POST",
-                        dataType: "json",
-                        success: function (data) {
-                            response($.map(data, function (item) {
-                                return { label: item.label, value: item.label };
-                            }))
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
-                        }
-                    });
-                },
-                minLength: 1
+        $(document).ready(function () {
+            $(".SizeInput").on("focus", function () {
+                $(this).autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '/Sizes/GetSizes/',
+                            data: { "prefix": request.term },
+                            type: "POST",
+                            dataType: "json",
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return { label: item.label, value: item.label };
+                                }))
+                            },
+                            error: function (response) {
+                                alert(response.responseText);
+                            },
+                            failure: function (response) {
+                                alert(response.responseText);
+                            }
+                        });
+                    },
+                    minLength: 1
+                });
             });
+        )};
+        $(document).ready(function () {
+            var max_fields = 10;
+            var wrapper = $("#sizes-list");
+            var add_button = $(".add-size");
+
+            var x = 1;
+            $(add_button).click(function (e) {
+                e.preventDefault();
+                if (x < max_fields) {
+                    x++;
+                    $(wrapper).append('<div class="form-group size-group"><input type="text" class="SizeInput" name="mytext[]"/> <input type="number" name="countSizes[]" value="0" /><a href="#" class="delete">Delete</a></div>'); //add input box
+                } else {
+                    alert('You Reached the limits')
+                }
+            });
+
+            $(wrapper).on("click", ".delete", function (e) {
+                e.preventDefault();
+                $(this).parent('div').remove();
+                x--;
+            })
         });
-       
+
+
+        document.forms[0].onsubmit = () => {
+            let formData = new FormData(document.forms[0]);
+            fetch('', {
+                method: 'post',
+                body: new URLSearchParams(formData)
+            })
+                .then(() => {
+                    alert('Posted using Fetch');
+                });
+            return false;
+        };
     </script>
 }

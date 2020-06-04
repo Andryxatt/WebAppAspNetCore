@@ -79,17 +79,23 @@ namespace WebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AddSingleProduct(Guid Id, int count, string price, int sizeId)
+        public IActionResult AddSingleProduct(Guid Id, List<int> countSizes, string price, List<int> sizesId)
         {
             var product = ctx.Products.Where(p => p.ProductId == Id).Include(d => d.Photos).FirstOrDefault();
-            SingleProduct singleProduct = new SingleProduct
+            List<SingleProduct> singleProducts = new List<SingleProduct>();
+            for (int i = 0; i < sizesId.Count(); i++)
             {
-                ProductId = Id,
-                Count = count,
-                PriceSale = float.Parse(price),
-                SizeId = sizeId
-            };
-            ctx.SingleProducts.Add(singleProduct);
+                SingleProduct singleProduct = new SingleProduct
+                {
+                    ProductId = Id,
+                    Count = countSizes[i],
+                    PriceSale = float.Parse(price),
+                    SizeId = sizesId[i]
+                };
+                singleProducts.Add(singleProduct);
+            }
+           
+            ctx.SingleProducts.AddRange(singleProducts);
             ctx.SaveChanges();
             return View("Index");
         }

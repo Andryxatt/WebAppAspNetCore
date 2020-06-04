@@ -9,7 +9,7 @@
         @foreach (var item in Model)
         {
 
-            @Html.Partial("_Product", item)
+            @await Html.PartialAsync("_Product", item)
         }
     </div>
 </div>
